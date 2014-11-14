@@ -14,6 +14,18 @@
 #define GET_NEXT_LINE_H
 #include <unistd.h>
 
+typedef struct s_file	t_file;
+
+struct					S_file
+{
+	int					file[3];
+	t_file				*nxt;
+};
+
+typdef t_file*			t_index;
+
+int		ft_register_new_file(t_file index, const int fd);
+int		ft_is_new_file(t_file index, const int fd);
 int		get_next_line(const int fd, char **line);
 
 #endif
