@@ -24,8 +24,8 @@ struct					S_file
 
 typdef t_file*			t_index;
 
-int		ft_register_new_file(t_file index, const int fd);
-int		ft_is_new_file(t_file index, const int fd);
+int		ft_register_new_file(t_index index, const int fd);
+int		ft_is_new_file(t_index index, const int fd);
 int		get_next_line(const int fd, char **line);
 
 #endif

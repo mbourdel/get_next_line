@@ -12,17 +12,17 @@
 
 #include "get_next_line.h"
 
-t_file	ft_register_new_file(t_file index, const int fd)
+t_index	ft_register_new_file(t_index index, const int fd)
 {
-	t_file		new_file;
+	t_index		new_file;
 
 	
 	return (new_file);
 }
 
-int		ft_is_new_file(t_file index, const int fd)
+int		ft_is_new_file(t_index index, const int fd)
 {
-	t_file		*tmp;
+	t_index		tmp;
 
 	tmp = index;
 	while (tmp != NULL)
@@ -37,7 +37,7 @@ int		ft_is_new_file(t_file index, const int fd)
 int		get_next_line(const int fd, char **line)
 /* version with chain list */
 {
-	static t_file	index = NULL;
+	static t_index	index = NULL;
 
 	if (ft_is_new_file(index, fd) == 1)
 
