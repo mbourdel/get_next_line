@@ -20,9 +20,10 @@ struct					S_file
 {
 	int					file[3];
 	t_file				*nxt;
+	t_file				*pvs;
 };
 
-typdef t_file*			t_index;
+typdef t_file			*t_index;
 
 int		ft_register_new_file(t_index index, const int fd);
 int		ft_is_new_file(t_index index, const int fd);
