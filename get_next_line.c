@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/18 15:25:53 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/18 17:31:27 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,21 @@ t_index ft_get_the_good_file(t_index index, const int fd)
 	return (index);
 }
 
+char	*ft_get_this_line(t_index index, char buff[BUFF_SIZE])
+{
+	int		i;
+	int		error;
+	int		charead;
 
+	i = 0;
+	error = 1;
+	charead = index->file[2];
+	while (buff[i - 1] != '\n' && buff[i- 1] && error == 1)
+		error = read(fd, buff[i++], 1);
+	index->file[1] += 1;
+	index->file[2] += i;
+	return (buff);
+}
 
 int		get_next_line(const int fd, char **line)
 {
