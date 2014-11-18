@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/13 16:32:58 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/18 15:25:53 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_index	ft_register_new_file(t_index index, const int fd)
 {
 	t_index		new_file;
-	
+
 	new_file = (t_index)malloc(sizeof(t_index));
 	new_file->file[0] = fd;
 	new_file->file[1] = 0;
@@ -29,7 +29,10 @@ t_index	ft_register_new_file(t_index index, const int fd)
 int		ft_is_new_file(t_index index, const int fd)
 {
 	t_index		tmp;
+	char		c;
 
+	if (read(fd, &c, 1) == -1)
+		return (-1);
 	while (index->pvs != NULL)
 		index = index->pvs;
 	tmp = index;
@@ -51,49 +54,21 @@ t_index ft_get_the_good_file(t_index index, const int fd)
 	return (index);
 }
 
+
+
 int		get_next_line(const int fd, char **line)
 {
-	static t_index	index = NULL;
+	static 	t_index	index = NULL;
+	int		error;
+	char	buff[BUFF_SIZE];
 
-	if (ft_is_new_file(index, fd) == 1)
+	error = 0;
+	if ((error = ft_is_new_file(index, fd)) == 1)
 		index = ft_register_new_file(index, fd);
-	
-
-
-
-
-}
-
-
-
-
-
-/*
-{
-	char		buffer[BUFF_SIZE];
-	static int	noline = 0;
-	int			i;
-	int			isfinish;
-
-	i = 1;
-	isfinish = 1;
-	if ((int)read(fd, buffer[0], 1) == -1)
+	else if (error == -1)
 		return (-1);
-	while (buffer[i - 1] != '\n' && isfinish > 0)
-		isfinish = read(fd, buffer[i++], 1);
-	if (isfinish = -1)
-		return (-1);
-	i = 0;
-	while (buffer[i])
-	{
-		line[noline][i] = buffer[i];
-		i++;
-	}
-	if (isfinish > 0)
-	{
-		noline++;
-		return (1);
-	}
-	return (0);
+	index = ft_get_the_good_file(index, fd);
+
+
+	return (1);
 }
-*/
