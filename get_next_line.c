@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/20 18:56:56 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/20 19:38:22 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,25 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 int		get_next_line(const int fd, char **line)
 {
 	static t_index	index = NULL;
+	static int		i = 0;
 	char			*buff;
+	int				ret;
 
 	index = ft_register_new_file(index, 1);
 	buff = ft_memalloc(BUFF_SIZE);
 	if (read(fd, &buff[0], 1) == -1 || !line)
 		return (-1);
+	if (buff[0] == '\n')
+		buff[0] = '\0';
 	while (index->pvs != NULL)
 		index = index->pvs;
 	if ((ft_is_new_file(index, fd)) == 1)
 		index = ft_register_new_file(index, fd);
 	while (index->file[0] != fd)
 		index = index->nxt;
-	return ((ft_get_this_line(index, buff, line)) == -1);
+	ret = ft_get_this_line(index, buff, line);
+	ft_putstr(line[i]);
+	i++;
+	free(buff);
+	return (ret);
 }
