@@ -6,11 +6,13 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/20 19:38:22 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/21 20:11:17 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_realloc(void *ptr, size_t size);
 
 t_index	ft_register_new_file(t_index index, const int fd)
 {
@@ -45,15 +47,24 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 {
 	int		i;
 	int		error;
+	int		size;
 
 	i = 1;
 	error = 1;
+	size = BUFF_SIZE;
 	while (buff[i - 1] != '\n' && buff[i - 1] && error == 1
-			&& i < BUFF_SIZE)
+			&& i < size)
+	{
 		error = read(index->file[0], &buff[i++], 1);
+		if (i == size)
+		{
+			buff = (char*)ft_realloc(buff, BUFF_SIZE);
+			size += BUFF_SIZE;
+		}
+	}
 	if (error == -1)
 		return (-1);
-	line[index->file[1]] = ft_strdup(buff);
+	line[0] /*[index->file[1]] */ = ft_strdup(buff);
 	index->file[1] += 1;
 	if (error == 0)
 		return (0);
