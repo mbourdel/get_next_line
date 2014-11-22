@@ -6,20 +6,20 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:48:23 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 17:47:15 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 18:45:03 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # include "./libft/libft.h"
-# define BUFF_SIZE 1000000
+# define BUFF_SIZE 6
 
 typedef struct s_file	t_file;
 
 struct					s_file
 {
-	int					file[2];
+	int					file[1];
 	t_file				*nxt;
 	t_file				*pvs;
 };

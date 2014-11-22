@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 18:05:09 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 18:55:01 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_index	ft_register_new_file(t_index index, const int fd)
 	if (!(new_file = (t_index)malloc(sizeof(t_file))))
 		return (NULL);
 	new_file->file[0] = fd;
-	new_file->file[1] = 0;
+//	new_file->file[1] = 0;
 	new_file->nxt = index;
 	if (index != NULL)
 		index->pvs = new_file;
@@ -68,10 +68,19 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 	if (error == -1)
 		return (-1);
 	line[0] = ft_strdup(buff);
-	index->file[1] += 1;
+//	index->file[1] += 1;
 	if (error == 0)
 		return (0);
 	return (1);
+}
+
+void	ft_distroy_everything(char *buff, t_index index)
+{
+	free(buff);
+	if (index->pvs != NULL)
+	{
+
+	(t_index)free(index);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -95,7 +104,9 @@ int		get_next_line(const int fd, char **line)
 	if (ret == 1)
 		ret = ft_get_this_line(index, buff, line);
 	else
+	{
 		ft_get_this_line(index, buff, line);
-	free(buff);
+		ft_distroy_everything(buff, index);
+	}
 	return (ret);
 }
