@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/21 20:11:17 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 18:05:09 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,21 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 	error = 1;
 	size = BUFF_SIZE;
 	while (buff[i - 1] != '\n' && buff[i - 1] && error == 1
-			&& i < size)
+			&& i <= size)
 	{
-		error = read(index->file[0], &buff[i++], 1);
 		if (i == size)
 		{
-			buff = (char*)ft_realloc(buff, BUFF_SIZE);
+			buff = ft_realloc(buff, BUFF_SIZE);
 			size += BUFF_SIZE;
 		}
+		else
+			error = read(index->file[0], &buff[i++], 1);
 	}
+	if (buff[i - 1] == '\n')
+		buff[i - 1] = '\0';
 	if (error == -1)
 		return (-1);
-	line[0] /*[index->file[1]] */ = ft_strdup(buff);
+	line[0] = ft_strdup(buff);
 	index->file[1] += 1;
 	if (error == 0)
 		return (0);
@@ -74,13 +77,12 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 int		get_next_line(const int fd, char **line)
 {
 	static t_index	index = NULL;
-	static int		i = 0;
 	char			*buff;
 	int				ret;
 
 	index = ft_register_new_file(index, 1);
 	buff = ft_memalloc(BUFF_SIZE);
-	if (read(fd, &buff[0], 1) == -1 || !line)
+	if ((ret = read(fd, &buff[0], 1)) == -1 || !line)
 		return (-1);
 	if (buff[0] == '\n')
 		buff[0] = '\0';
@@ -90,9 +92,10 @@ int		get_next_line(const int fd, char **line)
 		index = ft_register_new_file(index, fd);
 	while (index->file[0] != fd)
 		index = index->nxt;
-	ret = ft_get_this_line(index, buff, line);
-	ft_putstr(line[i]);
-	i++;
+	if (ret == 1)
+		ret = ft_get_this_line(index, buff, line);
+	else
+		ft_get_this_line(index, buff, line);
 	free(buff);
 	return (ret);
 }
