@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 20:38:42 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 20:51:07 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 		return (0);
 	return (1);
 }
-
+/*
 void	ft_destroy_everything(char *buff, t_index index)
 {
 	if (buff)
@@ -89,7 +89,7 @@ void	ft_destroy_everything(char *buff, t_index index)
 	free(index);
 	}
 }
-
+*/
 int		get_next_line(const int fd, char **line)
 {
 	static t_index	index = NULL;
@@ -113,9 +113,7 @@ int		get_next_line(const int fd, char **line)
 	else
 	{
 		ft_get_this_line(index, buff, line);
-		ft_destroy_everything(buff, index);
+//		ft_destroy_everything(buff, index);
 	}
-	if (ret == 0)
-		ft_destroy_everything(buff, index);
 	return (ret);
 }
