@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:48:23 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 18:45:03 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 20:29:42 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct s_file	t_file;
 
 struct					s_file
 {
-	int					file[1];
+	int					file;
 	t_file				*nxt;
 	t_file				*pvs;
 };
@@ -31,5 +31,6 @@ int						ft_is_new_file(t_index index, const int fd);
 int						ft_get_this_line(t_index index, char *buff,
 							char **line);
 int						get_next_line(const int fd, char **line);
+void					ft_destroy_everything(char *buff, t_index index);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 18:55:01 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/22 20:38:42 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_index	ft_register_new_file(t_index index, const int fd)
 
 	if (!(new_file = (t_index)malloc(sizeof(t_file))))
 		return (NULL);
-	new_file->file[0] = fd;
-//	new_file->file[1] = 0;
+	new_file->file = fd;
 	new_file->nxt = index;
 	if (index != NULL)
 		index->pvs = new_file;
@@ -36,7 +35,7 @@ int		ft_is_new_file(t_index index, const int fd)
 	tmp = index;
 	while (tmp != NULL)
 	{
-		if (tmp->file[0] == fd)
+		if (tmp->file == fd)
 			return (0);
 		tmp = tmp->nxt;
 	}
@@ -61,26 +60,34 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 			size += BUFF_SIZE;
 		}
 		else
-			error = read(index->file[0], &buff[i++], 1);
+			error = read(index->file, &buff[i++], 1);
 	}
 	if (buff[i - 1] == '\n')
 		buff[i - 1] = '\0';
 	if (error == -1)
 		return (-1);
 	line[0] = ft_strdup(buff);
-//	index->file[1] += 1;
 	if (error == 0)
 		return (0);
 	return (1);
 }
 
-void	ft_distroy_everything(char *buff, t_index index)
+void	ft_destroy_everything(char *buff, t_index index)
 {
-	free(buff);
-	if (index->pvs != NULL)
+	if (buff)
+		free(buff);
+	if (index)
 	{
-
-	(t_index)free(index);
+	if (index->pvs != NULL)
+		index->nxt->pvs = index->pvs;
+	if (index->nxt != NULL)
+		index->pvs->nxt = index->nxt;
+	if (index->nxt == NULL)
+		index->pvs->nxt = NULL;
+	if (index->pvs == NULL)
+		index->nxt->pvs = NULL;
+	free(index);
+	}
 }
 
 int		get_next_line(const int fd, char **line)
@@ -99,14 +106,16 @@ int		get_next_line(const int fd, char **line)
 		index = index->pvs;
 	if ((ft_is_new_file(index, fd)) == 1)
 		index = ft_register_new_file(index, fd);
-	while (index->file[0] != fd)
+	while (index->file != fd)
 		index = index->nxt;
 	if (ret == 1)
 		ret = ft_get_this_line(index, buff, line);
 	else
 	{
 		ft_get_this_line(index, buff, line);
-		ft_distroy_everything(buff, index);
+		ft_destroy_everything(buff, index);
 	}
+	if (ret == 0)
+		ft_destroy_everything(buff, index);
 	return (ret);
 }
