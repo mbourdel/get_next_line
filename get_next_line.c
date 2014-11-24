@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 20:51:07 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/24 19:24:50 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,54 +42,49 @@ int		ft_is_new_file(t_index index, const int fd)
 	return (1);
 }
 
+t_index	ft_destroy_link(t_index index)
+{
+	t_index		clear_index;
+
+	if (index)
+	{
+		clear_index = index->nxt;
+		clear_index->pvs = index->pvs;
+		free(index);
+		return (clear_index);
+	}
+	return (NULL);
+}
+
 int		ft_get_this_line(t_index index, char *buff, char **line)
 {
-	int		i;
-	int		error;
-	int		size;
+	int			i;
+	int			error;
+	int			size;
 
 	i = 1;
 	error = 1;
-	size = BUFF_SIZE;
+	size = BUFF_SIZE + 2;
 	while (buff[i - 1] != '\n' && buff[i - 1] && error == 1
 			&& i <= size)
-	{
 		if (i == size)
 		{
-			buff = ft_realloc(buff, BUFF_SIZE);
-			size += BUFF_SIZE;
+			buff = ft_realloc(buff, BUFF_SIZE + 2);
+			size += BUFF_SIZE + 2;
 		}
 		else
 			error = read(index->file, &buff[i++], 1);
-	}
 	if (buff[i - 1] == '\n')
 		buff[i - 1] = '\0';
-	if (error == -1)
+	if (error <= -1)
 		return (-1);
 	line[0] = ft_strdup(buff);
+	ft_strdel(&buff);
 	if (error == 0)
 		return (0);
 	return (1);
 }
-/*
-void	ft_destroy_everything(char *buff, t_index index)
-{
-	if (buff)
-		free(buff);
-	if (index)
-	{
-	if (index->pvs != NULL)
-		index->nxt->pvs = index->pvs;
-	if (index->nxt != NULL)
-		index->pvs->nxt = index->nxt;
-	if (index->nxt == NULL)
-		index->pvs->nxt = NULL;
-	if (index->pvs == NULL)
-		index->nxt->pvs = NULL;
-	free(index);
-	}
-}
-*/
+
 int		get_next_line(const int fd, char **line)
 {
 	static t_index	index = NULL;
@@ -97,7 +92,7 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 
 	index = ft_register_new_file(index, 1);
-	buff = ft_memalloc(BUFF_SIZE);
+	buff = ft_memalloc(BUFF_SIZE + 2);
 	if ((ret = read(fd, &buff[0], 1)) == -1 || !line)
 		return (-1);
 	if (buff[0] == '\n')
@@ -111,9 +106,8 @@ int		get_next_line(const int fd, char **line)
 	if (ret == 1)
 		ret = ft_get_this_line(index, buff, line);
 	else
-	{
 		ft_get_this_line(index, buff, line);
-//		ft_destroy_everything(buff, index);
-	}
+	if (ret == 0)
+		index = ft_destroy_link(index);
 	return (ret);
 }

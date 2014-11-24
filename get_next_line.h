@@ -6,7 +6,7 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:48:23 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/22 20:51:21 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/24 19:26:32 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int						ft_is_new_file(t_index index, const int fd);
 int						ft_get_this_line(t_index index, char *buff,
 							char **line);
 int						get_next_line(const int fd, char **line);
-//void					ft_destroy_everything(char *buff, t_index index);
+t_index					ft_destroy_link(t_index index);
 
 #endif
