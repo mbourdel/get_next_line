@@ -6,13 +6,11 @@
 /*   By: mbourdel <mbourdel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 14:35:03 by mbourdel          #+#    #+#             */
-/*   Updated: 2014/11/24 19:24:50 by mbourdel         ###   ########.fr       */
+/*   Updated: 2014/11/27 18:26:15 by mbourdel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	*ft_realloc(void *ptr, size_t size);
 
 t_index	ft_register_new_file(t_index index, const int fd)
 {
@@ -64,15 +62,15 @@ int		ft_get_this_line(t_index index, char *buff, char **line)
 
 	i = 1;
 	error = 1;
-	size = BUFF_SIZE + 2;
+	size = BUFF_SIZE;
 	while (buff[i - 1] != '\n' && buff[i - 1] && error == 1
 			&& i <= size)
 		if (i == size)
 		{
-			buff = ft_realloc(buff, BUFF_SIZE + 2);
-			size += BUFF_SIZE + 2;
+			buff = ft_realloc(buff, size);
+			size += size;
 		}
-		else
+		else if (i < size)
 			error = read(index->file, &buff[i++], 1);
 	if (buff[i - 1] == '\n')
 		buff[i - 1] = '\0';
@@ -92,7 +90,7 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 
 	index = ft_register_new_file(index, 1);
-	buff = ft_memalloc(BUFF_SIZE + 2);
+	buff = ft_memalloc(BUFF_SIZE);
 	if ((ret = read(fd, &buff[0], 1)) == -1 || !line)
 		return (-1);
 	if (buff[0] == '\n')
